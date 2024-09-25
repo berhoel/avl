@@ -16,3 +16,5 @@
 /.tox
 /dist
 /MANIFEST
+/ext/src/avl_module.c
+/poetry.lock

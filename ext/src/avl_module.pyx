@@ -37,15 +37,12 @@ from cpython.list cimport (PyList_Sort, PyList_Check, PyList_GetSlice,
 from cpython.object cimport PyObject_RichCompareBool, Py_EQ, Py_LT
 from cpython.ref cimport PyObject, Py_DECREF, Py_XDECREF, Py_XINCREF
 from cpython.slice cimport PySlice_Check, PySlice_GetIndices
-from cpython.unicode cimport PyUnicode_AsASCIIString, PyUnicode_GET_SIZE
+from cpython.unicode cimport PyUnicode_AsASCIIString, PyUnicode_GET_LENGTH
 from cpython.version cimport PY_MAJOR_VERSION
 
 from libc.string cimport strcpy
 
 cimport avl
-
-
-__version__ = VERSION
 
 
 cdef unicode _text(s):
@@ -68,7 +65,7 @@ cdef unicode _text(s):
         raise TypeError("Could not convert to unicode.")
 
 
-cdef int avl_key_compare_for_python(void * compare_arg, void * a, void * b):
+cdef int avl_key_compare_for_python(void * compare_arg, void * a, void * b) noexcept:
     cdef object self = <object>compare_arg
 
     if not self.compare_function:
@@ -117,7 +114,7 @@ cdef int tree_from_list(object list,
 
 
 # remove_by_key's free_key_fun callback
-cdef int avl_tree_key_free_fun(void * key):
+cdef int avl_tree_key_free_fun(void * key) noexcept:
     Py_DECREF(<object>key)
     return 0
 
@@ -206,7 +203,7 @@ cdef void avl_copy_avl_tree(tree source, tree dest) except *:
     dest.tree[0].length = source.tree[0].length
 
 
-cdef int avl_tree_key_printer(char * buffer, void * key):
+cdef int avl_tree_key_printer(char * buffer, void * key) noexcept:
     cdef object repr_string
     cdef int length
 
@@ -217,7 +214,7 @@ cdef int avl_tree_key_printer(char * buffer, void * key):
         except Exception as ex:
             print("As ASCII: ", ex.message, repr_string)
         try:
-            length = PyUnicode_GET_SIZE(repr_string)
+            length = PyUnicode_GET_LENGTH(repr_string)
         except Exception as ex:
             print("get size: ", ex.message, repr_string)
         return length
@@ -230,7 +227,7 @@ cdef class tree:
     cdef avl.avl_tree * tree
     cdef avl.avl_node * node_cache
     cdef Py_ssize_t cache_index
-    cpdef readonly object compare_function
+    cdef readonly object compare_function
 
     def __cinit__(self, args=None, object compare_function=None):
         cdef object tmp_list

@@ -1,3 +1,33 @@
+[tool.poetry]
+name = "avl"
+version = "2.3.0"
+description = "AVL Tree Objects for Python"
+authors = ["Sam Rushing"]
+license = "MIT"
+# packages = [{include = "avl.pxd"}]
+
+include = [
+    { path = "lib", format = ["sdist"] },
+    { path = "ext", format = ["sdist"] }
+]
+
+
+[tool.poetry.build]
+script = "build.py"
+generate-setup-file = true
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.group.dev.dependencies]
+cython = "*"
+pytest = "*"
+pytest-benchmark = "*"
+setuptools = "*"
+tox = "*"
+tox-pyenv-redux = "*"
+wheel = "*"
+
 [build-system]
-# Minimum requirements for the build system to execute.
-requires = ["setuptools", "Cython", "wheel"]  # PEP 508 specifications.
+requires = ["poetry-core", "setuptools", "cython"]
+build-backend = "poetry.core.masonry.api"

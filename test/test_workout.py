@@ -1,9 +1,9 @@
 # -*- Mode: Python -*-
 # give the avl module a good workout.
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import random
+
 # Standard libraries.
 import sys
 import time
@@ -114,10 +114,7 @@ def do_test(n):
 #         do_test(test_size)
 
 
-@pytest.mark.benchmark(
-    min_rounds=1000,
-    warmup=False
-)
+@pytest.mark.benchmark(min_rounds=1000, warmup=False)
 def test_timeit(benchmark):
     @benchmark
     def result():
